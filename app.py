@@ -24,6 +24,9 @@ if uploaded_file:
         y_col = st.selectbox("Y軸に使用するカラム", numeric_columns)
         chart_type = st.radio("グラフの種類", ["散布図", "棒グラフ", "折れ線グラフ"])
 
+        x_label = st.text_input("x軸ラベル", x_col)
+        y_label = st.text_input("y軸ラベル", y_col)
+
         fig, ax = plt.subplots()
         if chart_type == "散布図":
             sns.scatterplot(data=df, x=x_col, y=y_col, ax=ax)
@@ -31,10 +34,20 @@ if uploaded_file:
             sns.barplot(data=df, x=x_col, y=y_col, ax=ax)
         elif chart_type == "折れ線グラフ":
             sns.lineplot(data=df, x=x_col, y=y_col, ax=ax)
+
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+
+    
+        
+        plt.tight_layout
         st.pyplot(fig)
 
         st.subheader("📊 統計情報")
         st.write(df[[x_col, y_col]].describe())
+
+        st.subheader("🔍 プロットされたデータ")
+        st.dataframe(df[[x_col, y_col]])
     else:
         st.warning("数値カラムが2つ以上あるCSVファイルをご利用ください。")
 
